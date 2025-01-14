@@ -1,0 +1,20 @@
+{
+    "HOME": "./assets/indicators/home.png",
+    "SPELLBOOK": "./assets/indicators/spellbook.png",
+    "DOWNPOUR": "./assets/spells/downpour.png",
+    "FLUTE_ENSEMBLE": "./assets/spells/flute_ensemble.png",
+    "GUSTY_WINDS": "./assets/spells/gusty_winds.png",
+    "GARDENING_RIGHT_ARROW": "./assets/indicators/gardening_right_arrow.png",
+    "HARVEST": "./assets/indicators/harvest.png",
+    "TELEPORT_START": "./assets/indicators/teleport_start.png",
+    "OUTSIDE": "./assets/indicators/outside.png",
+    "HOUSING_MENU": "./assets/indicators/housing_menu.png",
+    "ELDER": "./assets/indicators/elder.png",
+    "SEEDS": "./assets/indicators/seeds.png",
+    "COUCH_POTATOES": "./assets/spells/couch_potatoes.png",
+    "UTILITY_SPELLS": "./assets/indicators/utility_spells.png",
+    "PLANT_ALL": "./assets/spells/plant_all.png",
+    "YES": "./assets/indicators/yes.png",
+    "HAS_NEEDS": "./assets/indicators/has_needs.png"
+}
+  
