@@ -1,8 +1,12 @@
 {
     "COUCH_POTATOES": [
-      { "spell": "DOWNPOUR", "coordinates": [1751, 530] },
-      { "spell": "FLUTE_ENSEMBLE", "coordinates": [1717, 530] },
-      { "spell": "GUSTY_WINDS", "coordinates": [1717, 530] }
+      { "spell": "DOWNPOUR", "category": "GROWING_SPELLS", "coordinates": [1751, 530] },
+      { "spell": "FLUTE_ENSEMBLE", "category": "GROWING_SPELLS", "coordinates": [1717, 530] },
+      { "spell": "GUSTY_WINDS", "category": "PEST_SPELLS", "coordinates": [1717, 530] }
+    ],
+    "PLANT_ALL": [
+      { "spell": "COUCH_POTATOES", "category": "SEEDS", "coordinates": [1664, 618] },
+      { "spell": "PLANT_ALL", "category": "UTILITY_SPELLS", "coordinates": [1712, 616] }
     ]
   }
   

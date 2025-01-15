@@ -13,7 +13,7 @@ class Bot:
         self.Locations = ConfigLoader.LOCATIONS
         self.Orders = ConfigLoader.ORDERS
         self.Navigator = Navigator(self.actions, self.Images, self.Locations)
-        self.Gardener = Gardener(self.actions, self.Images, self.Orders, self.Navigator)
+        self.Gardener = Gardener(self.actions, self.Images, self.Orders, self.Locations, self.Navigator)
 
     def run(self):
         t.sleep(2)
