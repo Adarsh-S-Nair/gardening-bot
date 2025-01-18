@@ -1,13 +1,8 @@
 opencv-python
-numpy
 python3_xlib
 pyautogui
 time
 random
-pytesseract
 re
-PIL
-pandas
-gspread
 python-dotenv
 firebase-admin
