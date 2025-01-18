@@ -6,3 +6,5 @@ credentials/*
 
 # Don't include pycache
 __pycache__/
+
+.env

@@ -9,3 +9,5 @@ re
 PIL
 pandas
 gspread
+python-dotenv
+firebase-admin

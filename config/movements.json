@@ -11,7 +11,8 @@
     "HARVEST_SPOT": [
       { "key": " ", "duration": 0.1 },
       { "key": "w", "duration": 0.2 },
-      { "key": "d", "duration": 0.5 }
+      { "key": "d", "duration": 0.5 },
+      { "key": "s", "duration": 0.1 }
     ]
   }
   

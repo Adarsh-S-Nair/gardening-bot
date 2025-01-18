@@ -46,14 +46,6 @@ class Gardener:
     def find_spell(self, spell, category):
         category_image = getattr(self.Images, category, None)
         spell_image = getattr(self.Images, spell, None)
-
-        if not category_image:
-            print(f"Category image for {category} not found.")
-            return False
-        
-        if not spell_image:
-            print(f"Spell image for {spell} not found in images")
-            return False
         
         print(f"Navigating to category: {category}...")
         if not self.actions.click_image(category_image):
@@ -102,7 +94,7 @@ class Gardener:
 
                 if not self.actions.is_image_visible(self.Images.HARVEST):
                     harvest_absent_start = harvest_absent_start or t.time()
-                    if t.time() - harvest_absent_start > 2:
+                    if t.time() - harvest_absent_start > 5:
                         break
                 else:
                     harvest_absent_start = None
