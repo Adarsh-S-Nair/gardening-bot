@@ -1,8 +1,5 @@
 opencv-python
 python3_xlib
 pyautogui
-time
-random
-re
 python-dotenv
 firebase-admin
