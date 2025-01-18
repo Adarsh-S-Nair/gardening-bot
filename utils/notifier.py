@@ -70,15 +70,19 @@ def check_and_notify():
     if plant_state.get("notified", False):
         print("Notification already sent for this state. Skipping.")
         return
+    
+    # Check if we are ready to send the notification
+    if now < next_update:
+        print("Plants are not ready to be checked on.")
+        return
 
-    if now >= next_update:
-        subject = f"Couch Potatoes Transitioned to {plant_state['next_state'].capitalize()}!"
-        body = (
-            f"Your couch potatoes have transitioned to the '{plant_state['next_state']}' stage.\n"
-            "Please take care of them in Wizard101!"
-        )
-        send_email(subject, body)
-        update_notification_status()
+    subject = f"Couch Potatoes Transitioned to {plant_state['next_state'].capitalize()}!"
+    body = (
+        f"Your couch potatoes have transitioned to the '{plant_state['next_state']}' stage.\n"
+        "Please take care of them in Wizard101!"
+    )
+    send_email(subject, body)
+    update_notification_status()
 
 
 if __name__ == "__main__":
