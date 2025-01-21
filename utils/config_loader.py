@@ -10,11 +10,15 @@ class ConfigLoader:
     class ORDERS:
         pass
 
+    class PLANT_INFO:
+        pass
+
     @staticmethod
     def load_config(
         image_file="./config/images.json",
         movement_file="./config/movements.json",
-        order_file="./config/orderings.json"
+        order_file="./config/orderings.json",
+        plant_info_file="./config/plant_info.json"
     ):
         try:
             # Load image paths
@@ -34,6 +38,12 @@ class ConfigLoader:
                 order_data = json.load(f)
             for key, value in order_data.items():
                 setattr(ConfigLoader.ORDERS, key, value)
+
+            # Load plant information
+            with open(plant_info_file, "r") as f:
+                plant_info_data = json.load(f)
+            for key, value in plant_info_data.items():
+                setattr(ConfigLoader.PLANT_INFO, key, value)
 
         except Exception as e:
             print(f"Error loading config files: {e}")

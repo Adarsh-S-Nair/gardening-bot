@@ -2,7 +2,7 @@ import os
 import json
 import smtplib
 from email.mime.text import MIMEText
-from datetime import datetime
+from datetime import datetime, timezone, timedelta
 from firebase_admin import credentials, db, initialize_app
 from dotenv import load_dotenv
 
@@ -64,7 +64,9 @@ def check_and_notify():
     print(f"Plant state: {plant_state}")
 
     next_update = datetime.fromisoformat(plant_state["next_update"])
-    now = datetime.now()
+    est = timezone(timedelta(hours=-5))
+    next_update = next_update.astimezone(est)
+    now = datetime.now(est)
 
     # Check if the notification has already been sent
     if plant_state.get("notified", False):

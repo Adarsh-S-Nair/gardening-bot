@@ -1,4 +1,16 @@
+from datetime import datetime, timedelta, timezone
 import time as t
+import json
+import os
+from dotenv import load_dotenv
+import firebase_admin
+from firebase_admin import credentials, db
+
+# Initialize Firebase
+load_dotenv()
+DB_CREDENTIALS = json.loads(os.getenv("DB_CREDENTIALS"))
+cred = credentials.Certificate(DB_CREDENTIALS)
+firebase_admin.initialize_app(cred, {'databaseURL': DB_CREDENTIALS["databaseURL"]})
 
 class Gardener:
     def __init__(self, actions, images, orders, locations, navigator):
@@ -8,7 +20,7 @@ class Gardener:
         self.Locations = locations
         self.navigator = navigator
 
-    def garden(self, spell_order, garden):
+    def garden(self, spell_order, garden, plant_info):
         # Go to the garden
         print(f"Navigating to garden...")
         self.navigator.navigate_to_location(garden)
@@ -25,6 +37,10 @@ class Gardener:
             if is_elder:
                 print("Plants were elder! Replanting seeds...")
                 self.replant_seeds(garden)
+
+        state = self.determine_state()
+        print(f"Current plant state: {state}")
+        self.update_plant_state_in_db(state, plant_info)
 
     def cast_spell_order(self, spell_order):
         self.actions.press_key("g")
@@ -118,3 +134,83 @@ class Gardener:
         # Plant the first seed
         self.cast_spell_order(self.Orders.PLANT_ALL)
         self.actions.click_image(self.Images.YES)
+
+
+    def determine_state(self):
+        self.actions.press_key("g")
+        
+        # Move the mouse to the popup location
+        popup_coordinates = (1617, 537)
+        self.actions.move_mouse_to(*popup_coordinates, duration=0.5)
+        t.sleep(2)
+
+        # Determine current state based on progress bar
+        state = None
+        # if self.actions.is_image_visible(self.Images.PROGRESS_TO_YOUNG):
+        #     state = "seedling"
+        # elif self.actions.is_image_visible(self.Images.PROGRESS_TO_MATURE):
+        #     state = "young"
+        if self.actions.is_image_visible(self.Images.PROGRESS_TO_ELDER):
+            state = "mature"
+        else:
+            print("Unable to determine the current state. No progress text found.")
+            state = "unknown"
+        self.actions.press_key("g")
+        return state
+    
+    def update_plant_state_in_db(self, current_state, plant_info):
+        try:
+            # Fetch current state from the database
+            ref = db.reference("plants/couch_potatoes")
+            plant_state = ref.get()
+
+            if not plant_state:
+                print("Failed to fetch plant state from the database.")
+                return
+
+            # Check if the state needs updating
+            db_current_state = plant_state.get("current_state")
+            if current_state == db_current_state:
+                print(f"No update needed. Current state in DB is already '{current_state}'.")
+                return
+
+            # Get the data for the update
+            states = ["seedling", "young", "mature", "elder"]
+            next_state = states[states.index(current_state) + 1] if current_state in states[:-1] else None
+            transition_time = self.calculate_transition_time(current_state, plant_info)
+            next_update_utc = datetime.now(timezone.utc) + timedelta(hours=transition_time)
+            next_update = next_update_utc.astimezone(timezone(timedelta(hours=-5)))
+            
+            # Update the database
+            ref.update({
+                "current_state": current_state,
+                "next_state": next_state,
+                "next_update": next_update.isoformat(),
+                "notified": False
+            })
+            print(f"Updated plant state in DB: current_state='{current_state}', next_state='{next_state}'")
+
+        except Exception as e:
+            print(f"Error updating plant state in DB: {e}")
+
+    def calculate_transition_time(self, current_state, plant_info):
+        transition_times = plant_info["state_durations"]
+        likes = plant_info["likes"]
+
+        # Base time for the current state
+        base_time = transition_times.get(current_state, None)
+        if base_time is None:
+            print(f"Invalid current state: {current_state}")
+            return None
+
+        # Calculate the effective time with likes
+        effective_time = base_time
+        for like, boost in likes.items():
+            if like == "pixie" and current_state != "mature":
+                continue
+            effective_time *= (1 - boost)
+
+        print(f"Time to transition from '{current_state}' to the next state: {effective_time:.2f} hours")
+        return effective_time
+
+        

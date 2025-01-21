@@ -12,7 +12,7 @@ cred = credentials.Certificate(DB_CREDENTIALS)
 firebase_admin.initialize_app(cred, {'databaseURL': DB_CREDENTIALS["databaseURL"]})
 
 # Write Data to Firebase
-def update_plant_state(new_state, next_update, next_state, notified):
+def update_plant_state(new_state, next_state, next_update, notified):
     ref = db.reference("plants/couch_potatoes")
     ref.set({
         "current_state": new_state,
@@ -29,6 +29,6 @@ def get_plant_state():
 
 # Example Usage
 if __name__ == "__main__":
-    update_plant_state("young", "2025-01-15T18:00:00", "mature", False)
+    update_plant_state("mature", "elder", "2025-01-21T16:20:00", False)
     state = get_plant_state()
     print("Current Plant State:", state)

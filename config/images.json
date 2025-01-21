@@ -21,6 +21,8 @@
     "UTILITY_SPELLS": "./assets/indicators/utility_spells.png",
 
     "YES": "./assets/indicators/yes.png",
-    "HAS_NEEDS": "./assets/indicators/has_needs.png"
+    "HAS_NEEDS": "./assets/indicators/has_needs.png",
+
+    "PROGRESS_TO_ELDER": "./assets/indicators/progress_to_elder.png"
 }
   
