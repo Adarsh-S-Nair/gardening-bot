@@ -64,9 +64,7 @@ def check_and_notify():
     print(f"Plant state: {plant_state}")
 
     next_update = datetime.fromisoformat(plant_state["next_update"])
-    est = timezone(timedelta(hours=-5))
-    next_update = next_update.astimezone(est)
-    now = datetime.now(est)
+    now = datetime.now(timezone(timedelta(hours=-5)))
 
     # Check if the notification has already been sent
     if plant_state.get("notified", False):
