@@ -74,6 +74,8 @@ def check_and_notify():
         return
     
     # Check if we are ready to send the notification
+    print(f"Current Time: {now}")
+    print(f"Next Update at: {next_update}")
     if now < next_update:
         print("Plants are not ready to be checked on.")
         return

@@ -29,6 +29,6 @@ def get_plant_state():
 
 # Example Usage
 if __name__ == "__main__":
-    update_plant_state("mature", "elder", "2025-01-21T16:20:00", False)
+    update_plant_state("mature", "elder", "2025-01-21T11:20:00", False)
     state = get_plant_state()
     print("Current Plant State:", state)
