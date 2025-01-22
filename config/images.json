@@ -23,6 +23,8 @@
     "YES": "./assets/indicators/yes.png",
     "HAS_NEEDS": "./assets/indicators/has_needs.png",
 
+    "PROGRESS_TO_YOUNG": "./assets/indicators/progress_to_young.png",
+    "PROGRESS_TO_MATURE": "./assets/indicators/progress_to_mature.png",
     "PROGRESS_TO_ELDER": "./assets/indicators/progress_to_elder.png"
 }
   

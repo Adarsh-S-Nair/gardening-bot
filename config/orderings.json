@@ -5,7 +5,6 @@
       { "spell": "GUSTY_WINDS", "category": "PEST_SPELLS", "coordinates": [1721, 530] }
     ],
     "PLANT_ALL": [
-      { "spell": "COUCH_POTATOES", "category": "SEEDS", "coordinates": [1664, 618] },
       { "spell": "PLANT_ALL", "category": "UTILITY_SPELLS", "coordinates": [1717, 576] }
     ]
   }

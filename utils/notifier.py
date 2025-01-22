@@ -66,14 +66,15 @@ def check_and_notify():
     next_update = datetime.fromisoformat(plant_state["next_update"])
     now = datetime.now(timezone(timedelta(hours=-5)))
 
+    # Check if we are ready to send the notification
+    print(f"Current Time: {now}")
+    print(f"Next Update at: {next_update}")
+    
     # Check if the notification has already been sent
     if plant_state.get("notified", False):
         print("Notification already sent for this state. Skipping.")
         return
     
-    # Check if we are ready to send the notification
-    print(f"Current Time: {now}")
-    print(f"Next Update at: {next_update}")
     if now < next_update:
         print("Plants are not ready to be checked on.")
         return

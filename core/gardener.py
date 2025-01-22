@@ -21,7 +21,7 @@ class Gardener:
         self.navigator = navigator
 
     def garden(self, spell_order, garden, plant_info):
-        # Go to the garden
+        # # Go to the garden
         print(f"Navigating to garden...")
         self.navigator.navigate_to_location(garden)
 
@@ -42,7 +42,7 @@ class Gardener:
         print(f"Current plant state: {state}")
         self.update_plant_state_in_db(state, plant_info)
 
-    def cast_spell_order(self, spell_order):
+    def cast_spell_order(self, spell_order, close_menu=True):
         self.actions.press_key("g")
         
         for step in spell_order:
@@ -56,8 +56,9 @@ class Gardener:
             if not self.cast_spell(spell, coordinates):
                 print(f"Failed to cast spell: {spell}")
                 return
-        
-        self.actions.press_key("g")
+            
+        if close_menu:
+            self.actions.press_key("g")
 
     def find_spell(self, spell, category):
         category_image = getattr(self.Images, category, None)
@@ -102,27 +103,35 @@ class Gardener:
         self.actions.hold_key("w")
         self.actions.hold_key("a")
 
-        harvest_absent_start = None
-        try:
-            while True:
-                self.actions.press_key("x")
-                t.sleep(0.1)
+        self.harvest_until_banner_gone()
+        
+        self.actions.release_key("w")
+        self.actions.release_key("a")
 
-                if not self.actions.is_image_visible(self.Images.HARVEST):
-                    harvest_absent_start = harvest_absent_start or t.time()
-                    if t.time() - harvest_absent_start > 5:
-                        break
-                else:
-                    harvest_absent_start = None
-        finally:
-            self.actions.release_key("w")
-            self.actions.release_key("a")
+        self.actions.press_key("a", 0.5)
+        self.actions.press_key("w", 0.3)
+
+        self.harvest_until_banner_gone()
         print("Harvesting process completed.")
         
         # Reset housing items
         self.actions.press_key("h")
         self.actions.press_key("h")
         return is_elder
+    
+    def harvest_until_banner_gone(self):
+        harvest_absent_start = None
+        while True:
+            self.actions.press_key("x")
+            t.sleep(0.1)
+
+            if not self.actions.is_image_visible(self.Images.HARVEST):
+                harvest_absent_start = harvest_absent_start or t.time()
+                if t.time() - harvest_absent_start > 5:
+                    break
+            else:
+                harvest_absent_start = None
+        return
     
     def replant_seeds(self, garden):
         print("Replanting seeds...")
@@ -132,7 +141,7 @@ class Gardener:
         self.navigator.navigate_to_location(garden)
 
         # Plant the first seed
-        self.cast_spell_order(self.Orders.PLANT_ALL)
+        self.cast_spell_order(self.Orders.PLANT_ALL, close_menu=False)
         self.actions.click_image(self.Images.YES)
 
 
@@ -146,11 +155,11 @@ class Gardener:
 
         # Determine current state based on progress bar
         state = None
-        # if self.actions.is_image_visible(self.Images.PROGRESS_TO_YOUNG):
-        #     state = "seedling"
-        # elif self.actions.is_image_visible(self.Images.PROGRESS_TO_MATURE):
-        #     state = "young"
-        if self.actions.is_image_visible(self.Images.PROGRESS_TO_ELDER):
+        if self.actions.is_image_visible(self.Images.PROGRESS_TO_YOUNG):
+            state = "seedling"
+        elif self.actions.is_image_visible(self.Images.PROGRESS_TO_MATURE):
+            state = "young"
+        elif self.actions.is_image_visible(self.Images.PROGRESS_TO_ELDER):
             state = "mature"
         else:
             print("Unable to determine the current state. No progress text found.")
@@ -212,5 +221,3 @@ class Gardener:
 
         print(f"Time to transition from '{current_state}' to the next state: {effective_time:.2f} hours")
         return effective_time
-
-        
